@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import NavHero from "../components/NavHero.astro";
 import { Image } from "astro:assets";
 
 // --- 1. CONFIGURATION ---
@@ -68,6 +69,7 @@ const paginatedProjects = projects.slice(startIndex, endIndex);
 ---
 
 <Layout>
+	<NavHero />
 	<div class="min-h-screen max-w-360 mx-auto px-6 md:px-10 py-12 md:py-20">
 		{
 			paginatedProjects.length > 0 ? (
@@ -190,7 +192,9 @@ const paginatedProjects = projects.slice(startIndex, endIndex);
 													<video
 														src={video.url}
 														class="w-full h-full object-cover"
-														controls
+														autoplay
+														muted
+														loop
 														playsinline
 														preload="metadata"
 														data-module="ImageReveal"
@@ -226,7 +230,7 @@ const paginatedProjects = projects.slice(startIndex, endIndex);
 		{/* --- PAGINATION --- */}
 		{
 			totalPages > 1 && (
-				<div class="flex justify-center items-center gap-2 mt-12 pt-8 border-t border-gray-200">
+				<div class="flex justify-center items-center gap-2 mt-12 pt-8">
 					<a
 						href={
 							currentPage > 1 ? `/?page=${currentPage - 1}` : "#"
