@@ -1,3 +1,7 @@
+---
+import "../styles/global.css";
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -6,10 +10,89 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+			rel="stylesheet"
+		/>
+
+		<title>Portfolio</title>
 	</head>
 	<body>
 		<slot />
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+			is:inline></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+			is:inline></script>
+
+		<script is:inline>
+			gsap.registerPlugin(ScrollTrigger);
+
+			class ImageReveal {
+				static defaults = {
+					items: '[data-module="ImageReveal"]',
+					scaleFrom: 1.2,
+					scrubDelay: 1,
+				};
+
+				constructor(element, options) {
+					this.options = { ...ImageReveal.defaults, ...options };
+					this.init();
+				}
+
+				init() {
+					this.createChildRefs().enable();
+					return this;
+				}
+
+				createChildRefs() {
+					this.items = [
+						...document.querySelectorAll(this.options.items),
+					];
+					return this;
+				}
+
+				enable() {
+					if (!!this.items.length) this.animate();
+					return this;
+				}
+
+				animate() {
+					this.items.forEach((item) => {
+						gsap.fromTo(
+							item,
+							{ scale: this.options.scaleFrom },
+							{
+								scale: 1,
+								ease: "none",
+								scrollTrigger: {
+									trigger: item,
+									start: "top bottom",
+									end: "center 25%",
+									scrub: this.options.scrubDelay,
+								},
+							},
+						);
+					});
+				}
+			}
+
+			// Initialize on DOM ready
+			document.addEventListener("DOMContentLoaded", () => {
+				new ImageReveal();
+				ScrollTrigger.refresh();
+			});
+
+			// Also on load for images that may load late
+			window.addEventListener("load", () => {
+				ScrollTrigger.refresh();
+			});
+		</script>
 	</body>
 </html>
 
