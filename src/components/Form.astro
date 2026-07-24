@@ -1,0 +1,114 @@
+---
+// Server-side: Get the Web App URL from environment variables
+const WEB_APP_URL = import.meta.env.PUBLIC_FORM_WEB_APP_URL;
+---
+
+<form
+    id="contactForm"
+    class="mx-auto flex flex-col gap-5 w-full max-w-200 mt-5"
+    data-webapp-url={WEB_APP_URL}
+>
+    <input
+        class="p-2.5 font-base border border-gray-300 rounded-lg focus:outline focus:outline-gray-300 bg-white/0 hover:bg-white transition-colors duration-300"
+        name="name"
+        type="text"
+        placeholder="Name"
+        required
+    />
+    <input
+        class="p-2.5 font-base border border-gray-300 rounded-lg focus:outline focus:outline-gray-300 bg-white/0 hover:bg-white transition-colors duration-300"
+        name="email"
+        type="email"
+        placeholder="Email"
+        required
+    />
+    <textarea
+        class="p-2.5 font-base border border-gray-300 rounded-lg h-30 m-h-30 field-sizing-content md:field-sizing-fixed focus:outline focus:outline-gray-300 bg-white/0 hover:bg-white transition-colors duration-300"
+        name="message"
+        placeholder="Message"
+        required></textarea>
+
+    <button
+        id="submitBtn"
+        class="mx-auto px-10 py-2.5 font-base font-bold text-white uppercase border-0 bg-gray-400 rounded-lg hover:bg-gray-500 w-fit transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        type="submit"
+    >
+        Send
+    </button>
+
+    <div id="formResponse" class="text-center mt-4 hidden"></div>
+</form>
+
+<script>
+    // @ts-nocheck - Disable TypeScript checking for this script
+    // Client-side: Handle form submission
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("contactForm");
+        const submitBtn = document.getElementById("submitBtn");
+        const responseDiv = document.getElementById("formResponse");
+
+        if (!form || !submitBtn || !responseDiv) {
+            console.error("Form elements not found");
+            return;
+        }
+
+        // Get the URL from the data attribute
+        const WEB_APP_URL = form.dataset.webappUrl;
+
+        if (!WEB_APP_URL) {
+            console.error("Web App URL not configured");
+            responseDiv.classList.remove("hidden");
+            responseDiv.className = "text-center mt-4 text-red-600";
+            responseDiv.textContent =
+                "❌ Form configuration error. Please contact support.";
+            return;
+        }
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Sending...";
+            responseDiv.classList.add("hidden");
+            responseDiv.className = "text-center mt-4 hidden";
+
+            // Get form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams(data),
+                });
+
+                const result = await response.json();
+
+                // Show response
+                responseDiv.classList.remove("hidden");
+                if (result.success) {
+                    responseDiv.className = "text-center mt-4 text-gray-600";
+                    responseDiv.textContent = "✅ " + result.message;
+                    form.reset();
+                } else {
+                    responseDiv.className = "text-center mt-4 text-red-600";
+                    responseDiv.textContent = "❌ " + result.message;
+                }
+            } catch (error) {
+                responseDiv.classList.remove("hidden");
+                responseDiv.className = "text-center mt-4 text-red-600";
+                responseDiv.textContent =
+                    "❌ An error occurred. Please try again.";
+                console.error("Form submission error:", error);
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Send";
+            }
+        });
+    });
+</script>

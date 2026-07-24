@@ -1,5 +1,20 @@
 ---
 import "../styles/global.css";
+
+const {
+	title = "Jack Tan, Digital Designer and Email Developer",
+	description = "Expert digital design and development for marketing technology. Specializing in pixel-perfect HTML emails and animated HTML5 banners. Explore my work.",
+	image = "", // to be updated
+} = Astro.props;
+
+const canonicalURL = new URL(
+	Astro.url.pathname,
+	Astro.site || "https://gbjack.github.io/", // to be updated
+);
+const imageURL = new URL(
+	image,
+	Astro.site || "https://gbjack.github.io/", // to be updated
+);
 ---
 
 <!doctype html>

@@ -4,6 +4,10 @@
   --font-sans: Outfit, system-ui, -apple-system, sans-serif;
 }
 
+html {
+  @apply scroll-smooth;
+}
+
 .img-wrapper {
   display: block;
   position: relative;
