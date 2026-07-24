@@ -4,16 +4,17 @@ import "../styles/global.css";
 const {
 	title = "Jack Tan, Digital Designer and Email Developer",
 	description = "Expert digital design and development for marketing technology. Specializing in pixel-perfect HTML emails and animated HTML5 banners. Explore my work.",
-	image = "", // to be updated
+	image = "/meta.png",
 } = Astro.props;
 
 const canonicalURL = new URL(
 	Astro.url.pathname,
-	Astro.site || "https://gbjack.github.io/", // to be updated
+	Astro.site || "https://jackscreative.work/",
 );
+
 const imageURL = new URL(
 	image,
-	Astro.site || "https://gbjack.github.io/", // to be updated
+	Astro.site || "https://jackscreative.work/",
 );
 ---
 
@@ -23,7 +24,7 @@ const imageURL = new URL(
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 
-		<!-- ====== FAVICONS ====== -->
+		<!-- FAVICONS -->
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link
 			rel="icon"
@@ -39,17 +40,17 @@ const imageURL = new URL(
 		/>
 		<link rel="shortcut icon" href="/favicon.ico" />
 
-		<!-- ====== APPLE TOUCH ICON ====== -->
+		<!-- APPLE TOUCH ICON -->
 		<link
 			rel="apple-touch-icon"
 			sizes="180x180"
 			href="/apple-touch-icon.png"
 		/>
 
-		<!-- ====== MANIFEST ====== -->
+		<!-- MANIFEST -->
 		<link rel="manifest" href="/site.webmanifest" />
 
-		<!-- ====== THEME COLOR ====== -->
+		<!-- THEME COLOR -->
 		<meta name="theme-color" content="#ffffff" />
 
 		<meta name="generator" content={Astro.generator} />
@@ -61,27 +62,30 @@ const imageURL = new URL(
 			rel="stylesheet"
 		/>
 
-		<title>Portfolio</title>
+		<title>{title}</title>
 
-		<!-- ====== META DESCRIPTION ====== -->
+		<!-- Primary Meta Tags -->
 		<meta name="description" content={description} />
 
-		<!-- ====== CANONICAL URL ====== -->
+		<!-- CANONICAL URL -->
 		<link rel="canonical" href={canonicalURL} />
 
-		<!-- ====== OPEN GRAPH (optional but good for social sharing) ====== -->
+		<!-- Open Graph / Facebook -->
 		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
+				<meta property="og:description" content={description} />
 		<meta property="og:url" content={canonicalURL} />
 		{image && <meta property="og:image" content={imageURL} />}
 		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:site_name" content="Jack's Creative Work" />
 
-		<!-- ====== TWITTER (optional) ====== -->
+		<!-- X (Twitter) -->
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		{image && <meta name="twitter:image" content={imageURL} />}
 	</head>
+
 	<body>
 		<slot />
 
