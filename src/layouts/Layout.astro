@@ -22,8 +22,36 @@ const imageURL = new URL(
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
+
+		<!-- ====== FAVICONS ====== -->
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="/favicon-32x32.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="16x16"
+			href="/favicon-16x16.png"
+		/>
+		<link rel="shortcut icon" href="/favicon.ico" />
+
+		<!-- ====== APPLE TOUCH ICON ====== -->
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href="/apple-touch-icon.png"
+		/>
+
+		<!-- ====== MANIFEST ====== -->
+		<link rel="manifest" href="/site.webmanifest" />
+
+		<!-- ====== THEME COLOR ====== -->
+		<meta name="theme-color" content="#ffffff" />
+
 		<meta name="generator" content={Astro.generator} />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,6 +62,25 @@ const imageURL = new URL(
 		/>
 
 		<title>Portfolio</title>
+
+		<!-- ====== META DESCRIPTION ====== -->
+		<meta name="description" content={description} />
+
+		<!-- ====== CANONICAL URL ====== -->
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- ====== OPEN GRAPH (optional but good for social sharing) ====== -->
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		{image && <meta property="og:image" content={imageURL} />}
+		<meta property="og:type" content="website" />
+
+		<!-- ====== TWITTER (optional) ====== -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		{image && <meta name="twitter:image" content={imageURL} />}
 	</head>
 	<body>
 		<slot />
