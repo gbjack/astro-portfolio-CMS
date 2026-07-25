@@ -6,11 +6,6 @@
 
 html {
   @apply scroll-smooth;
-  overflow-x: hidden;
-}
-
-body {
-  overflow-x: hidden;
 }
 
 .img-wrapper {
