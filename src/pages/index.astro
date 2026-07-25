@@ -264,7 +264,7 @@ const paginatedProjects = projects.slice(startIndex, endIndex);
 				<div class="flex justify-center items-center gap-2">
 					<a
 						href={
-							currentPage > 1 ? `/?page=${currentPage - 1}` : "#"
+							currentPage > 1 ? `/?page=${currentPage - 1}#top` : "#"
 						}
 						aria-label="Go to previous page"
 						class={`px-2 py-2 rounded hover:bg-gray-300 text-gray-600 ${currentPage === 1 ? "opacity-50 pointer-events-none" : ""}`}
@@ -288,7 +288,7 @@ const paginatedProjects = projects.slice(startIndex, endIndex);
 					{Array.from({ length: totalPages }, (_, i) => i + 1).map(
 						(pageNum) => (
 							<a
-								href={`/?page=${pageNum}`}
+								href={`/?page=${pageNum}#top`}
 								class={`px-3 py-1.5 rounded ${
 									pageNum === currentPage
 										? "bg-black text-white"
@@ -302,7 +302,7 @@ const paginatedProjects = projects.slice(startIndex, endIndex);
 					<a
 						href={
 							currentPage < totalPages
-								? `/?page=${currentPage + 1}`
+								? `/?page=${currentPage + 1}#top`
 								: "#"
 						}
 						aria-label="Go to Next Page"
