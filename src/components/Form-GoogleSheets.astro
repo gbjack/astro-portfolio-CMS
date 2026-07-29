@@ -1,6 +1,12 @@
+---
+// Server-side: Get the Web App URL from environment variables
+const WEB_APP_URL = import.meta.env.PUBLIC_FORM_WEB_APP_URL;
+---
+
 <form
     id="contactForm"
     class="mx-auto flex flex-col gap-5 w-full max-w-200 mt-5"
+    data-webapp-url={WEB_APP_URL}
 >
     <input
         class="p-2.5 font-base border border-gray-300 rounded-lg focus:outline focus:outline-gray-300 bg-white/0 hover:bg-white transition-colors duration-300"
@@ -20,8 +26,7 @@
         class="p-2.5 font-base border border-gray-300 rounded-lg h-30 m-h-30 field-sizing-content md:field-sizing-fixed focus:outline focus:outline-gray-300 bg-white/0 hover:bg-white transition-colors duration-300"
         name="message"
         placeholder="Message"
-        required
-    ></textarea>
+        required></textarea>
 
     <button
         id="submitBtn"
@@ -34,7 +39,9 @@
     <div id="formResponse" class="text-center mt-4 hidden"></div>
 </form>
 
-<script is:inline>
+<script>
+    // @ts-nocheck - Disable TypeScript checking for this script
+    // Client-side: Handle form submission
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("contactForm");
         const submitBtn = document.getElementById("submitBtn");
@@ -42,6 +49,18 @@
 
         if (!form || !submitBtn || !responseDiv) {
             console.error("Form elements not found");
+            return;
+        }
+
+        // Get the URL from the data attribute
+        const WEB_APP_URL = form.dataset.webappUrl;
+
+        if (!WEB_APP_URL) {
+            console.error("Web App URL not configured");
+            responseDiv.classList.remove("hidden");
+            responseDiv.className = "text-center mt-4 text-red-600";
+            responseDiv.textContent =
+                "❌ Form configuration error. Please contact support.";
             return;
         }
 
@@ -59,31 +78,34 @@
             const data = Object.fromEntries(formData);
 
             try {
-                const response = await fetch("/api/contact", {
+                const response = await fetch(WEB_APP_URL, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "application/x-www-form-urlencoded",
                     },
-                    body: JSON.stringify(data),
+                    body: new URLSearchParams(data),
                 });
 
                 const result = await response.json();
 
+                // Show response
                 responseDiv.classList.remove("hidden");
-                if (response.ok) {
+                if (result.success) {
                     responseDiv.className = "text-center mt-4 text-gray-600";
-                    responseDiv.textContent = "✅ " + (result.message || "Message sent successfully!");
+                    responseDiv.textContent = "✅ " + result.message;
                     form.reset();
                 } else {
                     responseDiv.className = "text-center mt-4 text-red-600";
-                    responseDiv.textContent = "❌ " + (result.message || "Something went wrong. Please try again.");
+                    responseDiv.textContent = "❌ " + result.message;
                 }
             } catch (error) {
                 responseDiv.classList.remove("hidden");
                 responseDiv.className = "text-center mt-4 text-red-600";
-                responseDiv.textContent = "❌ An error occurred. Please try again.";
+                responseDiv.textContent =
+                    "❌ An error occurred. Please try again.";
                 console.error("Form submission error:", error);
             } finally {
+                // Re-enable button
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Send";
             }
